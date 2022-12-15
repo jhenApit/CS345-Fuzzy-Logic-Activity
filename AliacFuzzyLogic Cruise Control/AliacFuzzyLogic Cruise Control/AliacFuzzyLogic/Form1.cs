@@ -12,10 +12,10 @@ namespace AliacFuzzyLogic
     public partial class Form1 : Form
     {
         FuzzyEngine fe;
-        MembershipFunctionCollection speed,angle,throttle;
-        LinguisticVariable myspeed, myangle, mythrottle;
-        FuzzyRuleCollection myrules;
-        
+        MembershipFunctionCollection dirtType, dirtQuality, washTime;
+        LinguisticVariable myDirtType, myDirtQuality, myWashTime;
+        FuzzyRuleCollection myRules;
+
 
         public Form1()
         {
@@ -26,125 +26,110 @@ namespace AliacFuzzyLogic
         public void setMembers()
         {
 
-            speed = new MembershipFunctionCollection();
-            speed.Add(new MembershipFunction("LOW",0.0,0.0,45.0,50.0));
-            speed.Add(new MembershipFunction("OK", 45.0, 50.0, 50.0, 55.0));
-            speed.Add(new MembershipFunction("HIGH", 50.0, 55.0, 100.0, 100.0));
-            myspeed = new LinguisticVariable("SPEED", speed);
+            dirtType = new MembershipFunctionCollection
+            {
+                new MembershipFunction("NONGREASY", 0, 0, 33.3, 50),
+                new MembershipFunction("MEDIUM", 33.3, 50, 50, 66.6),
+                new MembershipFunction("GREASY", 50, 66.6, 100, 100)
+            };
+            myDirtType = new LinguisticVariable("TYPE", dirtType);
 
 
-            angle = new MembershipFunctionCollection();
-            angle.Add(new MembershipFunction("DOWN", -10.0, -10.0, -5.0, 0.0));
-            angle.Add(new MembershipFunction("LEVEL", -5.0, 1.0, 1.0, 5.0));
-            angle.Add(new MembershipFunction("UP", 0.0, 5.0, 10.0, 10.0));
-            myangle = new LinguisticVariable("ANGLE", angle);
+            dirtQuality = new MembershipFunctionCollection
+            {
+                new MembershipFunction("SMALL", 0, 0, 33.3, 50),
+                new MembershipFunction("MEDIUM", 33.3, 50, 50, 66.6),
+                new MembershipFunction("LARGE", 50, 66.6, 100, 100)
+            };
+            myDirtQuality = new LinguisticVariable("QUALITY", dirtQuality);
 
-            throttle = new MembershipFunctionCollection();
-            throttle.Add(new MembershipFunction("LOW",0.0,0.0,2.0,4.0));
-            throttle.Add(new MembershipFunction("LM", 2.0, 4.0, 4.0, 6.0));
-            throttle.Add(new MembershipFunction("MED", 4.0, 6.0, 6.0, 8.0));
-            throttle.Add(new MembershipFunction("HM", 6.0, 8.0, 8.0, 10.0));
-            throttle.Add(new MembershipFunction("HIGH", 8.0, 10.0, 10.0, 10.0));
-            mythrottle = new LinguisticVariable("THROTTLE", throttle);
-
-            
-        
+            washTime = new MembershipFunctionCollection
+            {
+                new MembershipFunction("VS", 0.0,0.0,2.0,4.0),
+                new MembershipFunction("SHORT", 2.0, 4.0, 4.0, 6.0),
+                new MembershipFunction("MEDIUM", 4.0, 6.0, 6.0, 8.0),
+                new MembershipFunction("LONG", 6.0, 8.0, 8.0, 10.0),
+                new MembershipFunction("VL", 8.0, 10.0, 10.0, 10.0)
+            };
+            myWashTime = new LinguisticVariable("WASHTIME", washTime);
         }
 
         public void setRules()
         {
-          myrules = new FuzzyRuleCollection();
-          myrules.Add(new FuzzyRule("IF (SPEED IS HIGH) AND (ANGLE IS UP) THEN THROTTLE IS LM"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS HIGH) AND (ANGLE IS LEVEL) THEN THROTTLE IS LM"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS HIGH) AND (ANGLE IS DOWN) THEN THROTTLE IS LOW"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS OK) AND (ANGLE IS UP) THEN THROTTLE IS HM"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS OK) AND (ANGLE IS LEVEL) THEN THROTTLE IS MED"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS OK) AND (ANGLE IS DOWN) THEN THROTTLE IS LM"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS LOW) AND (ANGLE IS UP) THEN THROTTLE IS HIGH"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS OK) AND (ANGLE IS LEVEL) THEN THROTTLE IS HM"));
-          myrules.Add(new FuzzyRule("IF (SPEED IS OK) AND (ANGLE IS DOWN) THEN THROTTLE IS HM"));
+            myRules = new FuzzyRuleCollection
+            {
+                new FuzzyRule("IF (QUALITY IS SMALL) AND (TYPE IS GREASY) THEN WASHTIME IS LONG"),
+                new FuzzyRule("IF (QUALITY IS MEDIUM) AND (TYPE IS GREASY) THEN WASHTIME IS LONG"),
+                new FuzzyRule("IF (QUALITY IS LARGE) AND (TYPE IS GREASY) THEN WASHTIME IS VL"),
+                new FuzzyRule("IF (QUALITY IS SMALL) AND (TYPE IS MEDIUM) THEN WASHTIME IS MEDIUM"),
+                new FuzzyRule("IF (QUALITY IS MEDIUM) AND (TYPE IS MEDIUM) THEN WASHTIME IS MEDIUM"),
+                new FuzzyRule("IF (QUALITY IS LARGE) AND (TYPE IS MEDIUM) THEN WASHTIME IS MEDIUM"),
+                new FuzzyRule("IF (QUALITY IS SMALL) AND (TYPE IS NONGREASY) THEN WASHTIME IS VS"),
+                new FuzzyRule("IF (QUALITY IS MEDIUM) AND (TYPE IS NONGREASY) THEN WASHTIME IS SHORT"),
+                new FuzzyRule("IF (QUALITY IS LARGE) AND (TYPE IS NONGREASY) THEN WASHTIME IS SHORT"),
+            };
         }
 
         public void setFuzzyEngine()
         {
             fe = new FuzzyEngine();
-            fe.LinguisticVariableCollection.Add(myspeed);
-            fe.LinguisticVariableCollection.Add(myangle);
-            fe.LinguisticVariableCollection.Add(mythrottle);
-            fe.FuzzyRuleCollection = myrules;
-        }
-
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void defuziffyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-         
+            fe.LinguisticVariableCollection.Add(myDirtType);
+            fe.LinguisticVariableCollection.Add(myDirtQuality);
+            fe.LinguisticVariableCollection.Add(myWashTime);
+            fe.FuzzyRuleCollection = myRules;
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             setMembers();
             setRules();
-            //setFuzzyEngine();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            myspeed.InputValue=(Convert.ToDouble(textBox1.Text));
-            myspeed.Fuzzify("OK");
-            
-            
-            
+            myDirtType.InputValue=(Convert.ToDouble(textBox1.Text));
+            myDirtType.Fuzzify("MEDIUM");
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            myangle.InputValue = (Convert.ToDouble(textBox2.Text));
-            myangle.Fuzzify("LEVEL");
-            
+            myDirtQuality.InputValue = (Convert.ToDouble(textBox2.Text));
+            myDirtQuality.Fuzzify("MEDIUM");       
         }
 
         public void fuziffyvalues()
         {
-            myspeed.InputValue = (Convert.ToDouble(textBox1.Text));
-            myspeed.Fuzzify("LOW");
-            myangle.InputValue = (Convert.ToDouble(textBox2.Text));
-            myangle.Fuzzify("DOWN");
-        
+            myDirtType.InputValue = (Convert.ToDouble(textBox1.Text));
+            myDirtType.Fuzzify("NONGREASY");
+            myDirtQuality.InputValue = (Convert.ToDouble(textBox2.Text));
+            myDirtQuality.Fuzzify("SMALL");     
         }
         public void defuzzy()
         {
             setFuzzyEngine();
-            fe.Consequent = "THROTTLE";
+            fe.Consequent = "WASHTIME";
             textBox3.Text = "" + fe.Defuzzify();
         }
 
-        public void computenewspeed()
+        public void computenewtype()
         {
-
-            double oldspeed = Convert.ToDouble(textBox1.Text);
-            double oldthrottle = Convert.ToDouble(textBox3.Text);
-            double oldangle = Convert.ToDouble(textBox2.Text);
-            double newspeed = ((1 - 0.1) * (oldspeed)) + (oldthrottle - (0.1 * oldangle));
-            textBox1.Text = "" + newspeed;
+            double oldType = Convert.ToDouble(textBox1.Text);
+            double oldWashTime = Convert.ToDouble(textBox3.Text);
+            double oldQuality = Convert.ToDouble(textBox2.Text);
+            double newType = ((1 - 0.1) * (oldType)) + (oldWashTime - (0.1 * oldQuality));
+            textBox1.Text = "" + newType;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             setFuzzyEngine();
-            fe.Consequent = "THROTTLE";
+            fe.Consequent = "WASHTIME";
             textBox3.Text = "" + fe.Defuzzify();
-            
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            computenewspeed();
+            computenewtype();
         }
-
-      
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -156,9 +141,7 @@ namespace AliacFuzzyLogic
         {
             fuziffyvalues();
             defuzzy();
-            computenewspeed();
+            computenewtype();
         }
-
-       
     }
 }
