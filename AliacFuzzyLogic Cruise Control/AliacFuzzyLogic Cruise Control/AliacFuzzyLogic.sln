@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliacFuzzyLogic", "AliacFuzzyLogic\AliacFuzzyLogic.csproj", "{9B975D55-BD28-40E5-8351-5D81DCC4DC99}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApitFuzzyLogic", "AliacFuzzyLogic\ApitFuzzyLogic.csproj", "{9B975D55-BD28-40E5-8351-5D81DCC4DC99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {12474330-DB71-4035-A211-2BD5BE3098ED}
 	EndGlobalSection
 EndGlobal

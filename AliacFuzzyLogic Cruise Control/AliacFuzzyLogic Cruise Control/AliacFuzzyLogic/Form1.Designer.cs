@@ -1,4 +1,4 @@
-﻿namespace AliacFuzzyLogic
+﻿namespace ApitFuzzyLogic
 {
     partial class Form1
     {
